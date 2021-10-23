@@ -32,6 +32,7 @@ function App() {
             <Nav className="me-auto">
               <Nav.Link onClick={() => { history.push("/signup") }}>Signup</Nav.Link>
               <Nav.Link onClick={() => { history.push("/login") }}>Login</Nav.Link>
+              <Nav.Link onClick={() => { history.push("/") }}>Dashboard</Nav.Link>
 
             </Nav>
           </Navbar.Collapse>

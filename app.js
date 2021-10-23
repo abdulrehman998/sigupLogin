@@ -28,7 +28,7 @@ app.post('/api/v1/login', async (req, res) => {
     console.log("req.body: ", req.body);
 
 
-    const userLogin = User.findOne({ email: email })
+    const userLogin = await User.findOne({ email: email })
 
     const isMatch = await bcrypt.compare(password, userLogin.password);
 
@@ -36,6 +36,8 @@ app.post('/api/v1/login', async (req, res) => {
         res.status(400).json({error: "Invalid Credentials"});
     }else{
         res.json({message: "User Login Successfully"})
+        res.send(userLogin);
+
     }
 } catch (err) {
     console.log(err);
