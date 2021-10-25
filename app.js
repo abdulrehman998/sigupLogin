@@ -3,6 +3,7 @@ const PORT = process.env.PORT || 5000
 const app = express()
 const path = require('path')
 const mongoose = require('mongoose');
+const postModel = require("./schema");
 const User = require("./userSchema");
 const cors = require("cors");
 const bcrypt = require('bcryptjs');
@@ -97,6 +98,42 @@ app.post('/api/v1/profile', (req, res)=>{
             res.send(data)
         }
     })
+});
+
+
+app.post("/api/v1/create", (request, response) => {
+    try {
+        const body = request.body;
+        postModel.create(body, (error, data) => {
+            if (error) {
+                throw error;
+            } else {
+                console.log(data);
+                response.send(data);
+            }
+        });
+    } catch (error) {
+        response.send(`Got an error `, error.message);
+    }
+});
+
+app.get("/api/v1/posts", (request, response) => {
+    try {
+        const { title } = request.headers;
+        const query = {};
+        if (title) {
+            query.title = title;
+        }
+        postModel.find(query, (error, data) => {
+            if (error) {
+                throw error;
+            } else {
+                response.send(JSON.stringify(data));
+            }
+        });
+    } catch (error) {
+        response.send(`Got an error during get posts `, error.message);
+    }
 });
 
 app.get('/**', (req, res) => {
