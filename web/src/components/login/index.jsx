@@ -48,7 +48,7 @@ function Login() {
         .then((res) => {
           console.log("res: ", res.data);
 
-          if(res.data.email){
+          if(res.data){
             alert('login successfull');
             const email = values.email;
             localStorage.setItem('email', email)
