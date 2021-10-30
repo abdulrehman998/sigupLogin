@@ -22,9 +22,12 @@ function App() {
 
   let history = useHistory();
 
+  // clear state
+
+
   return (
     <>
-      <Navbar bg="primary" expand="lg">
+      <Navbar className="bgcolor1" expand="lg">
         <Container>
           <Navbar.Brand href="#home">My App</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -32,8 +35,6 @@ function App() {
             <Nav className="me-auto">
               <Nav.Link onClick={() => { history.push("/signup") }}>Signup</Nav.Link>
               <Nav.Link onClick={() => { history.push("/login") }}>Login</Nav.Link>
-              <Nav.Link onClick={() => { history.push("/") }}>Dashboard</Nav.Link>
-
             </Nav>
           </Navbar.Collapse>
         </Container>

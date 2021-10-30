@@ -36,8 +36,14 @@ app.post('/api/v1/login', async (req, res) => {
     if(!isMatch) {
         res.status(400).json({error: "Invalid Credentials"});
     }else{
-        res.json({message: "User Login Successfully"})
-        res.send(userLogin);
+        res.send({
+            name: userLogin.name,
+            email: userLogin.email,
+            address: userLogin.address,
+            phoneNumber: userLogin.phoneNumber,
+            gender: userLogin.gender,
+            _id: userLogin._id,
+        });
 
     }
 } catch (err) {
@@ -100,7 +106,6 @@ app.post('/api/v1/profile', (req, res)=>{
     })
 });
 
-
 app.post("/api/v1/create", (request, response) => {
     try {
         const body = request.body;
@@ -116,6 +121,7 @@ app.post("/api/v1/create", (request, response) => {
         response.send(`Got an error `, error.message);
     }
 });
+
 
 app.get("/api/v1/posts", (request, response) => {
     try {

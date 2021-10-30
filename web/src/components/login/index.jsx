@@ -1,20 +1,17 @@
-import { useState, useEffect, useRef } from "react"
 import axios from 'axios';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
   useHistory,
 } from "react-router-dom";
 
-import { Formik, Field, Form, useFormik } from "formik";
+import { useFormik } from "formik";
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import * as yup from 'yup';
 import { baseUrl } from "./../../server"
-
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 
 const validationSchema = yup.object({
@@ -38,71 +35,89 @@ function Login() {
       email: '',
       password: '',
     },
-    onSubmit: function (values) {
-      console.log("values: ", values)
-
-      axios.post(`${baseUrl}/api/v1/login`, {
-        email: values.email,
-        password: values.password,
-      })
+    onSubmit: (values) => {
+      axios
+        .post(`${baseUrl}/api/v1/login`, {
+          email: values.email,
+          password: values.password,
+        })
         .then((res) => {
-          console.log("res: ", res.data);
-
-          if(res.data){
-            alert('login successfull');
-            const email = values.email;
-            localStorage.setItem('email', email)
+          if (res.data !== "error") {
+            console.log(res.data)
+            alert('Login Successfully')
+            localStorage.setItem('email', values.email)
             history.push("/")
           }
-        })
-        .catch((err)=>{
-          console.log(err)
+
+
         })
 
     }
   });
+
+
 
   return (
     <div style={{ margin: "2rem" }}>
       <h1>Login page</h1>
 
       <form onSubmit={formik.handleSubmit}>
-        <Stack spacing={2}>
 
-          <TextField
-            fullWidth
-            color="primary"
-            id="outlined-basic"
-            label="Email"
-            variant="outlined"
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={5}>
+            <Grid item md={2}>
 
-            name="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
+            </Grid>
+            <Grid item xs={12} md={8} >
+              <TextField
+                fullWidth
+                color="primary"
+                id="outlined-basic"
+                label="Email"
+                variant="outlined"
 
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
 
-          <TextField
-            fullWidth
-            color="primary"
-            id="filled-basic"
-            label="Password"
-            variant="outlined"
-            type="password"
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+              />
+            </Grid>
+            <Grid item md={2}>
 
-            name="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
+            </Grid>
+            <Grid item md={2}>
 
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-          />
+            </Grid>
+            <Grid item xs={12} md={8} >
+              <TextField
+                fullWidth
+                color="primary"
+                id="filled-basic"
+                label="Password"
+                variant="outlined"
+                type="password"
 
-          <Button fullWidth variant="contained" color="primary" type="submit">Login</Button>
-        </Stack>
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
 
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
+              />
+            </Grid>
+            <Grid item xs={12} md={5}>
+
+            </Grid>
+            <Grid item xs={12} md={2}>
+              <Button fullWidth variant="contained" color="primary" type="submit">Login</Button>
+            </Grid>
+            <Grid item xs={12} md={5}>
+
+            </Grid>
+          </Grid>
+        </Box>
       </form>
 
     </div>
