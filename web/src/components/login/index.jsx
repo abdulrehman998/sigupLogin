@@ -12,6 +12,8 @@ import * as yup from 'yup';
 import { baseUrl } from "./../../server"
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import { GlobalContext } from '../../context/Context';
+import { useContext } from "react";
 
 
 const validationSchema = yup.object({
@@ -29,6 +31,8 @@ const validationSchema = yup.object({
 function Login() {
   let history = useHistory();
 
+  let { state, dispatch } = useContext(GlobalContext);
+
   const formik = useFormik({
     validationSchema: validationSchema,
     initialValues: {
@@ -36,16 +40,27 @@ function Login() {
       password: '',
     },
     onSubmit: (values) => {
-      axios
-        .post(`${baseUrl}/api/v1/login`, {
-          email: values.email,
-          password: values.password,
-        })
+      console.log("values: ", values)
+
+      axios.post(`${baseUrl}/api/v1/login`, {
+        email: values.email,
+        password: values.password,
+      }, {
+        withCredentials: true
+      })
         .then((res) => {
-          if (res.data !== "error") {
-            console.log(res.data)
-            alert('Login Successfully')
-            localStorage.setItem('email', values.email)
+          console.log("res: ", res.data);
+
+          if (res.data.email) {
+
+            dispatch({
+              type: "USER_LOGIN",
+              payload: {
+                name: res.data.name,
+                email: res.data.email,
+                _id: res.data._id
+              }
+            })
             history.push("/")
           }
 
@@ -64,11 +79,11 @@ function Login() {
       <form onSubmit={formik.handleSubmit}>
 
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={5}>
-            <Grid item md={2}>
+          <Grid container spacing={2}>
+            <Grid item md={3}>
 
             </Grid>
-            <Grid item xs={12} md={8} >
+            <Grid item xs={12} md={6} >
               <TextField
                 fullWidth
                 color="primary"
@@ -84,13 +99,13 @@ function Login() {
                 helperText={formik.touched.email && formik.errors.email}
               />
             </Grid>
-            <Grid item md={2}>
+            <Grid item md={3}>
 
             </Grid>
-            <Grid item md={2}>
+            <Grid item md={3}>
 
             </Grid>
-            <Grid item xs={12} md={8} >
+            <Grid item xs={12} md={6} >
               <TextField
                 fullWidth
                 color="primary"
@@ -106,6 +121,9 @@ function Login() {
                 error={formik.touched.password && Boolean(formik.errors.password)}
                 helperText={formik.touched.password && formik.errors.password}
               />
+            </Grid>
+            <Grid item md={3}>
+
             </Grid>
             <Grid item xs={12} md={5}>
 

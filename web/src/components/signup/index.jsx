@@ -79,12 +79,12 @@ function Signup() {
     });
 
     return (
-        <div style={{ margin: "2rem" }}>
+        <div style={{ margin: "1rem" }}>
             <h1>Signup page</h1>
 
             <form onSubmit={formik.handleSubmit}>
                 <Box sx={{ flexGrow: 1 }}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1}>
                         <Grid item md={3}>
 
                         </Grid>
@@ -94,7 +94,7 @@ function Signup() {
                                 color="primary"
                                 id="outlined-basic"
                                 label="Full Name"
-                                variant="outlined"
+                                variant="standard"
 
                                 name="name"
                                 value={formik.values.name}
@@ -116,7 +116,7 @@ function Signup() {
                                 color="primary"
                                 id="outlined-basic"
                                 label="Email"
-                                variant="outlined"
+                                variant="standard"
 
                                 name="email"
                                 value={formik.values.email}
@@ -138,7 +138,7 @@ function Signup() {
                                 color="primary"
                                 id="filled-basic"
                                 label="Password"
-                                variant="outlined"
+                                variant="standard"
                                 type="password"
 
                                 name="password"
@@ -161,7 +161,7 @@ function Signup() {
                                 color="primary"
                                 id="filled-basic"
                                 label="Address"
-                                variant="outlined"
+                                variant="standard"
                                 type="address"
 
                                 name="address"
@@ -183,8 +183,7 @@ function Signup() {
                                 fullWidth
                                 name="phoneNumber"
                                 label="Phone Number"
-                                variant="outlined"
-                                placeholder="Enter Phone Number"
+                                variant="standard"
                                 value={formik.values.phoneNumber}
                                 onChange={formik.handleChange}
                                 error={
