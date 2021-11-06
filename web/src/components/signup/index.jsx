@@ -41,6 +41,8 @@ const validationSchema = yup.object({
 
 function Weather() {
 
+    let history = useHistory();
+
     const formik = useFormik({
         validationSchema: validationSchema,
         initialValues: {
@@ -65,6 +67,9 @@ function Weather() {
                 })
                 .then((res) => {
                     console.log("res: ", res.data);
+                    alert("Successfully Signed Up")
+                    history.push("/")
+
                 })
                
         },

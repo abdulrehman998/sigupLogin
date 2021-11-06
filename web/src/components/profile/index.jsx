@@ -41,6 +41,7 @@ function onSubmitFunction(values) {
 
 
 function Home() {
+    
 
     let { state, dispatch } = useContext(GlobalContext);
 
@@ -120,7 +121,7 @@ function Home() {
                                     })
                                         .then((res) => {
                                             console.log("res +++: ", res.data);
-
+                                            alert("Logging Out")
                                             dispatch({
                                                 type: "USER_LOGOUT"
                                             })
