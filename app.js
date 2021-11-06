@@ -3,9 +3,8 @@ const PORT = process.env.PORT || 5000
 const SECRET = process.env.SECRET || "12345"
 const app = express()
 const path = require('path')
-const mongoose = require('mongoose');
 const postModel = require("./schema");
-const User = require("./userSchema");
+const mongoose = require('mongoose');
 const {
     stringToHash,
     varifyHash
@@ -17,154 +16,76 @@ const cookieParser = require('cookie-parser');
 mongoose.connect("mongodb+srv://armalik:1234@cluster0.ymiti.mongodb.net/test")
 
 
-app.use('/', express.static(path.join(__dirname, 'web/build')))
+const User = mongoose.model('User', {
+    name: String,
+    email: String,
+    password: String,
+    address: String,
+    phoneNumber: Number,
+    gender: String,
+    created: { type: Date, default: Date.now },
+});
+
 app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin: ["http://localhost:3000", "http://localhost:5000"],
+    origin: ["http://localhost:3000", "http://localhost:5001"],
     credentials: true
 }))
 
-
-app.post('/api/v1/login', async (req, res) => {
-    try {
-        const { email, password, } = req.body;
-
-        if (!email ||
-            !password
-        ) {
-            console.log("required field missing");
-            res.status(403).send("required field missing");
-            return;
-        }
-
-        console.log("req.body: ", req.body);
-
-
-        const userLogin = await User.findOne({ email: email })
-
-        const isMatch = await varifyHash(password, userLogin.password);
-
-        if (!isMatch) {
-            res.status(400).json({ error: "Invalid Credentials" });
-        } else {
-            var token = jwt.sign({
-                name: userLogin.name,
-                email: userLogin.email,
-                _id: userLogin._id,
-            }, SECRET);
-            console.log("token created: ", token);
-
-            res.cookie("token", token, {
-                httpOnly: true,
-                // expires: (new Date().getTime + 300000), //5 minutes
-                maxAge: 300000
-            });
-
-            res.send({
-                name: userLogin.name,
-                email: userLogin.email,
-                address: userLogin.address,
-                phoneNumber: userLogin.phoneNumber,
-                gender: userLogin.gender,
-                _id: userLogin._id,
-            });
-
-        }
-    } catch (err) {
-        console.log(err);
-    }
+app.use('/', express.static(path.join(__dirname, 'web/build')))
+app.get("/", (req, res, next) => {
+    res.sendFile(path.join(__dirname, "./web/build/index.html"))
 })
-app.post('/api/v1/signup', async (req, res) => {
 
 
-    const { name, email, password, address, phoneNumber, gender } = req.body;
+app.post('/api/v1/login', (req, res, next) => {
 
-
-    if (!email ||
-        !password ||
-        !name ||
-        !address ||
-        !phoneNumber ||
-        !gender
+    if (!req.body.email ||
+        !req.body.password
     ) {
         console.log("required field missing");
         res.status(403).send("required field missing");
         return;
     }
-    try {
-        const userExist = await User.findOne({ email: email });
+    console.log("req.body: ", req.body);
 
-        if (userExist) {
-            return res.status(422).json({ error: "Email already Exist" });
-        } else {
-            console.log(req.body)
-
-            stringToHash(req.body.password).then(passwordHash => {
-                console.log("hash: ", passwordHash);
-
-                let newUser = new User({
-                    name,
-                    email,
-                    password,
-                    address,
-                    phoneNumber,
-                    gender,
-                })
-                newUser.save(() => {
-                    console.log("data saved")
-                    res.send('signup success')
-                })
-            })
-        }
-    } catch (err) {
-        console.log(err)
-    }
-
-})
-
-
-app.use((req, res, next) => {
-
-    jwt.verify(req.cookies.token, SECRET,
-        function (err, decoded) {
-
-            req.body._decoded = decoded;
-
-            console.log("decoded: ", decoded) // bar
-
-            if (!err) {
-                next();
-            } else {
-                res.status(401).send("Un-Authenticated")
-            }
-
-        })
-
-});
-
-app.post('/api/v1/logout', (req, res, next) => {
-    res.cookie("token", "", {
-        httpOnly: true,
-        maxAge: 300000
-    });
-    res.send();
-})
-
-
-app.get('/api/v1/profile', (req, res) => {
-    User.findOne({ email: req.body._decoded.email }, (err, user) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
 
         if (err) {
             res.status(500).send("error in getting database")
         } else {
             if (user) {
-                res.send({
-                    name: user.name,
-                    email: user.email,
-                    _id: user._id,
-                });
+
+                varifyHash(req.body.password, user.password).then(result => {
+                    if (result) {
+
+                        var token = jwt.sign({
+                            name: user.name,
+                            email: user.email,
+                            _id: user._id,
+                        }, SECRET);
+                        console.log("token created: ", token);
+
+                        res.cookie("token", token, {
+                            httpOnly: true,
+                            // expires: (new Date().getTime + 300000), //5 minutes
+                            maxAge: 300000
+                        });
+
+                        res.send({
+                            name: user.name,
+                            email: user.email,
+                            _id: user._id,
+                        });
+                    } else {
+                        res.status(401).send("Authentication fail");
+                    }
+                }).catch(e => {
+                    console.log("error: ", e)
+                })
+
             } else {
                 res.send("user not found");
             }
@@ -172,27 +93,48 @@ app.get('/api/v1/profile', (req, res) => {
     })
 })
 
-app.post("/api/v1/create", (request, response) => {
+app.post('/api/v1/signup', (req, res, next) => {
 
-    try {
-        const body = request.body;
-        postModel.create(body, (error, data) => {
-            if (error) {
-                throw error;
+    if (!req.body.email ||
+        !req.body.password ||
+        !req.body.name ||
+        !req.body.address ||
+        !req.body.phoneNumber ||
+        !req.body.gender
+    ) {
+        console.log("required field missing");
+        res.status(403).send("required field missing");
+        return;
+    } else {
+
+        User.findOne({ email: req.body.email }, (err, user) => {
+            if (user) {
+                res.send("user already exist");
             } else {
-                console.log(data);
-                response.send(data);
+                console.log(req.body)
+
+                stringToHash(req.body.password).then(passwordHash => {
+                    console.log("hash: ", passwordHash);
+
+                    let newUser = new User({
+                        name: req.body.name,
+                        email: req.body.email,
+                        password: passwordHash,
+                        address: req.body.address,
+                        phoneNumber: req.body.phoneNumber,
+                        gender: req.body.gender,
+                    })
+                    newUser.save(() => {
+                        console.log("data saved")
+                        res.send('signup success')
+                    })
+                })
             }
-        });
-    } catch (error) {
-        response.send(`Got an error `, error.message);
+        })
     }
 
-});
-
-
+})
 app.get("/api/v1/posts", (request, response) => {
-
     try {
         const { title } = request.headers;
         const query = {};
@@ -210,9 +152,79 @@ app.get("/api/v1/posts", (request, response) => {
         response.send(`Got an error during get posts `, error.message);
     }
 });
+app.use((req, res, next) => {
 
-app.get('/**', (req, res) => {
-    res.redirect('/')
+    jwt.verify(req.cookies.token, SECRET,
+        function (err, decoded) {
+
+            req.body._decoded = decoded;
+
+            console.log("decoded: ", decoded) // bar
+
+            if (!err) {
+                next();
+            } else {
+                res.status(401).sendFile(path.join(__dirname, "./web/build/index.html"))
+            }
+
+        })
+
+});
+
+app.post('/api/v1/logout', (req, res, next) => {
+    res.cookie("token", "", {
+        httpOnly: true,
+        maxAge: 300000
+    });
+    res.send();
+})
+
+app.get('/api/v1/profile', (req, res) => {
+    User.findOne({ email: req.body._decoded.email }, (err, user) => {
+
+        if (err) {
+            res.status(500).send("error in getting database")
+        } else {
+            if (user) {
+                console.log(user)
+                res.send({
+                    name: user.name,
+                    email: user.email,
+                    _id: user._id,
+                    address: user.address,
+                    phoneNumber: user.phoneNumber,
+                    gender: user.gender,
+                });
+            } else {
+                res.send("user not found");
+            }
+        }
+    })
+})
+app.post('/api/v1/profile', (req, res) => {
+    res.send('profile created')
+})
+app.post("/api/v1/create", (request, response) => {
+    try {
+        const body = request.body;
+        postModel.create(body, (error, data) => {
+            if (error) {
+                throw error;
+            } else {
+                console.log(data);
+                response.send(data);
+            }
+        });
+    } catch (error) {
+        response.send(`Got an error `, error.message);
+    }
+});
+
+
+
+app.get("/**", (req, res, next) => {
+    res.sendFile(path.join(__dirname, "./web/build/index.html"))
+    // res.redirect("/")
 })
 
 app.listen(PORT, () => {
