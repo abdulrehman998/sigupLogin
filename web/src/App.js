@@ -62,6 +62,8 @@ function App() {
 
   return (
     <>
+
+    {(state?.user?.email)?
       <Navbar className="bgcolor1" expand="lg">
       <Container>
           <Navbar.Brand href="#home">React Login project</Navbar.Brand>
@@ -69,6 +71,17 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link onClick={() => { history.push("/") }}>Dashboard</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      :
+      <Navbar className="bgcolor1" expand="lg">
+      <Container>
+          <Navbar.Brand href="#home">React Login project</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
               <Nav.Link onClick={() => { history.push("/") }}>Login</Nav.Link>
               <Nav.Link onClick={() => { history.push("/signup") }}>Signup</Nav.Link>
 
@@ -76,6 +89,8 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      
+      }
 
 
 

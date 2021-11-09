@@ -26,6 +26,15 @@ const User = mongoose.model('User', {
     created: { type: Date, default: Date.now },
 });
 
+const Post = mongoose.model("Post", {
+    postText: String,
+    created: { type: Date, default: Date.now },
+
+    userId: String,
+    name: String,
+    email: String,
+})
+
 app.use(express.json())
 app.use(cookieParser())
 
@@ -220,7 +229,50 @@ app.post("/api/v1/create", (request, response) => {
     }
 });
 
+app.post("/api/v1/post", (req, res) => {
+    const newPost = new Post({
+        postText: req.body.postText,
+        userId: req.body._decoded._id,
+        name: req.body._decoded.name,
+        email: req.body._decoded.email
+    });
+    newPost.save().then(() => {
+        console.log("Post created");
+        res.send("Post created");
+    });
+});
 
+app.delete("/api/v1/post", (req, res) => {
+    Post.deleteOne({ _id: req.body.id, userId: req.body._decoded._id }, (err, data) => {
+        res.send("Post deleted");
+    });
+});
+
+app.put("/api/v1/post", (req, res) => {
+    Post.updateOne({
+        _id: req.body.id,
+        userId: req.body._decoded._id
+    }, {
+        postText: req.body.postText
+    }, (err, data) => {
+        res.send("Post deleted");
+    });
+});
+
+app.get("/api/v1/posts", (req, res) => {
+
+    const page = Number(req.query.page);
+
+    console.log("page: ", page);
+
+    Post.find({})
+        .sort({ created: "desc" })
+        .skip(page)
+        .limit(2)
+        .exec(function (err, data) {
+            res.send(data);
+        });
+});
 
 app.get("/**", (req, res, next) => {
     res.sendFile(path.join(__dirname, "./web/build/index.html"))
