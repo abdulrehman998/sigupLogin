@@ -208,7 +208,7 @@ function Weather() {
                                 name="genderParent"
                             >
                                 <FormControlLabel
-                                    name="gender"
+                                    name=""
                                     value="male"
                                     control={<Radio />}
                                     label="Male"
