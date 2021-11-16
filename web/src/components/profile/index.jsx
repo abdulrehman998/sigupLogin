@@ -45,7 +45,7 @@ function Dashboard() {
         })
         socket.on("POSTS", (data) => {
             console.log(data);
-            setPosts((prev) => [data, ...prev])
+            setPosts(data)
         })
         return () => {
             socket.close();
