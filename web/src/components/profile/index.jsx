@@ -35,7 +35,7 @@ function Dashboard() {
     }, [])
 
     useEffect(() => {
-        const socket = io("http://localhost:5001");
+        const socket = io("https://loginsignup1.herokuapp.com/");
 
         socket.on("connect", () => {
             console.log("Connected to server")
