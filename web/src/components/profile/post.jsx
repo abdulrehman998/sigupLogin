@@ -19,9 +19,11 @@ const ExpandMore = styled((props) => {
         duration: theme.transitions.duration.shortest,
     }),
 }));
+    
+
 
 export default function RecipeReviewCard(props) {
-    const { text, team1, team2, toss, overs, wickets, email, name, timestamp } = props;
+    const { text, team1, team2, toss, overs, wickets, email, name, timestamp, bat, bowl, batter1, batter2, bowler, batter1runs, batter1balls, batter2balls, batter2runs, bowlerruns, bowlerwickets, target } = props;
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -37,22 +39,28 @@ export default function RecipeReviewCard(props) {
                     </Avatar>
                 }
                 title="ICC Men's T20 World Cup 2021"
-                subheader="Live Match"
+                subheader="Live"
                 
             />
             
-            <CardContent>
+            <CardContent  style={{ textAlign: "center" }}>
             <Typography variant="h2" color="text.secondary">
                     {team1} VS {team2}
                 </Typography>
                 <Typography variant="h6" color="text.secondary">
                     {team1} won the Toss and choose to {toss} 
                 </Typography>
-                <Typography variant="h4" color="text.secondary">
-                    {text}/ {wickets}
+                <Typography variant="h4">
+                   {bat} {text}/ {wickets}
                 </Typography>
-                <Typography variant="h5" color="text.secondary">
+                <Typography variant="h6" color="text.secondary">
+                    {batter1} {batter1runs} ({batter1balls}) {batter2} {batter2runs} ({batter2balls})
+                </Typography>
+                <Typography variant="h5">
                     {overs} Overs
+                </Typography>
+                <Typography variant="h6" color="text.secondary">
+                    {bowler} {bowlerwickets}/({bowlerruns})
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>

@@ -39,11 +39,23 @@ const Post = mongoose.model("Post", {
     team1Text: String,
     team2Text: String,
     gender: String,
+    batText: String,
+    bowlText: String,
+    batter1Text: String,
+    batter2Text: String,
+    bowlerText: String,
+    batter1runsText: String,
+    batter1ballsText: String,
+    batter2runsText: String,
+    batter2ballsText: String,
+    bowlerrunsText: String,
+    targetText: String,
     created: { type: Date, default: Date.now },
     userId: String,
     name: String,
     email: String,
 })
+
 
 app.use(express.json())
 app.use(cookieParser())
@@ -212,9 +224,22 @@ app.post("/api/v1/post", (req, res) => {
         team1Text: req.body.team1Text,
         team2Text: req.body.team2Text,
         gender: req.body.gender,
+        batText: req.body.batText,
+        bowlText: req.body.bowlText,
+        batter1Text: req.body.batter1Text,
+        batter2Text: req.body.batter2Text,
+        bowlerText: req.body.bowlerText,
+        batter1runsText: req.body.batter1runsText,
+        batter1ballsText: req.body.batter1ballsText,
+        batter2runsText: req.body.batter2runsText,
+        batter2ballsText: req.body.batter2ballsText,
+        bowlerwicketsText: req.body.bowlerwicketsText,
+        bowlerrunsText: req.body.bowlerrunsText,
+        targetText: req.body.targetText,
         userId: req.body._decoded._id,
         name: req.body._decoded.name,
-        email: req.body._decoded.email
+        email: req.body._decoded.email,
+
     });
     newPost.save().then(() => {
         console.log("Post created");
@@ -226,9 +251,22 @@ app.post("/api/v1/post", (req, res) => {
             team1Text: req.body.team1Text,
             team2Text: req.body.team2Text,
             gender: req.body.gender,
+            batText: req.body.batText,
+            bowlText: req.body.bowlText,
+            batter1Text: req.body.batter1Text,
+            batter2Text: req.body.batter2Text,
+            bowlerText: req.body.bowlerText,
+            batter1runsText: req.body.batter1runsText,
+            batter1ballsText: req.body.batter1ballsText,
+            batter2runsText: req.body.batter2runsText,
+            batter2ballsText: req.body.batter2ballsText,
+            bowlerwicketsText: req.body.bowlerwicketsText,
+            bowlerrunsText: req.body.bowlerrunsText,
+            targetText: req.body.targetText,
             userId: req.body._decoded._id,
             name: req.body._decoded.name,
-            email: req.body._decoded.email
+            email: req.body._decoded.email,
+
         });
         res.send({
             postText: req.body.postText,
@@ -237,9 +275,22 @@ app.post("/api/v1/post", (req, res) => {
             team1Text: req.body.team1Text,
             team2Text: req.body.team2Text,
             gender: req.body.gender,
+            batText: req.body.batText,
+            bowlText: req.body.bowlText,
+            batter1Text: req.body.batter1Text,
+            batter2Text: req.body.batter2Text,
+            bowlerText: req.body.bowlerText,
+            batter1runsText: req.body.batter1runsText,
+            batter1ballsText: req.body.batter1ballsText,
+            batter2runsText: req.body.batter2runsText,
+            batter2ballsText: req.body.batter2ballsText,
+            bowlerwicketsText: req.body.bowlerwicketsText,
+            bowlerrunsText: req.body.bowlerrunsText,
+            targetText: req.body.targetText,
             userId: req.body._decoded._id,
             name: req.body._decoded.name,
-            email: req.body._decoded.email
+            email: req.body._decoded.email,
+
         });
     });
 });

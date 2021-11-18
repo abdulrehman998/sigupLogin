@@ -10,7 +10,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { Button, Navbar, Container, Nav, NavDropdown, Form } from 'react-bootstrap';
 
 
 
@@ -27,6 +27,20 @@ function App() {
 
   let history = useHistory();
   let { state, dispatch } = useContext(GlobalContext);
+
+
+  const logout = () => {
+    axios.post(`${baseUrl}/api/v1/logout`, {}, {
+      withCredentials: true
+    })
+      .then((res) => {
+        console.log("res +++: ", res.data);
+  
+        dispatch({
+          type: "USER_LOGOUT"
+        })
+      })
+  }
 
   useEffect(() => {
 
@@ -74,6 +88,9 @@ function App() {
               <Nav.Link onClick={() => { history.push("/") }}>Admin Panel</Nav.Link>
               <Nav.Link onClick={() => { history.push("/scoreboard") }}>Score Board</Nav.Link>
             </Nav>
+            <Form className="d-flex">
+                <Button variant="danger" onClick={logout}>Logout</Button>
+              </Form>
           </Navbar.Collapse>
         </Container>
       </Navbar>
