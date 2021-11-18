@@ -176,7 +176,7 @@ app.use((req, res, next) => {
 app.post('/api/v1/logout', (req, res, next) => {
     res.cookie("token", "", {
         httpOnly: true,
-        maxAge: 300000
+        maxAge: 1000000
     });
     res.send();
 })
@@ -230,7 +230,17 @@ app.post("/api/v1/post", (req, res) => {
             name: req.body._decoded.name,
             email: req.body._decoded.email
         });
-        res.send("Post created");
+        res.send({
+            postText: req.body.postText,
+            wicketsText: req.body.wicketsText,
+            oversText: req.body.oversText,
+            team1Text: req.body.team1Text,
+            team2Text: req.body.team2Text,
+            gender: req.body.gender,
+            userId: req.body._decoded._id,
+            name: req.body._decoded.name,
+            email: req.body._decoded.email
+        });
     });
 });
 

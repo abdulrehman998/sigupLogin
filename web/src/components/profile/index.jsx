@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from "react"
 import { baseUrl } from "./../../server"
-import Post from "./post"
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,8 +8,8 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import io from 'socket.io-client';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 
 
@@ -20,53 +19,13 @@ function Dashboard() {
     const [overs, setOvers] = useState("");
     const [team1, setTeam1] = useState("");
     const [team2, setTeam2] = useState("");
-    const [posts, setPosts] = useState([])
+    const [bat, setBat] = useState("");
+    const [bowl, setBowl] = useState("");
+    const [batter1, setBatter1] = useState("");
+    const [batter2, setBatter2] = useState("");
+    const [bowler, setBowler] = useState("");
     const [refresh, setRefresh] = useState(false)
-    const [isMore, setIsMore] = useState(true)
 
-    useEffect(() => {
-        axios.get(`${baseUrl}/api/v1/posts?page=0`, {
-            withCredentials: true
-        })
-            .then((res) => {
-                console.log("res +++: ", res.data);
-                setPosts(res.data)
-            })
-    }, [])
-
-    useEffect(() => {
-        const socket = io("https://loginsignup1.herokuapp.com/");
-
-        socket.on("connect", () => {
-            console.log("Connected to server")
-        })
-        socket.on("disconnect", () => {
-            console.log("Disconnected to server")
-        })
-        socket.on("POSTS", (data) => {
-            console.log(data);
-            setPosts(data)
-        })
-        return () => {
-            socket.close();
-        }
-    }, [])
-
-    // const loadMore = () => {
-    //     axios.get(`${baseUrl}/api/v1/posts?page=${posts.length}`,
-    //         {
-    //             withCredentials: true
-    //         })
-    //         .then((res) => {
-    //             console.log("res +++: ", res.data);
-    //             if (res.data?.length) {
-    //                 const newPosts = [...posts, ...res.data]
-    //                 setPosts(newPosts)
-    //             } else {
-    //                 setIsMore(false)
-    //             }
-    //         })
-    // }
 
 
     const submit = () => {
@@ -94,102 +53,266 @@ function Dashboard() {
     }
 
     return (
-        <div style={{ margin: "1rem" }}>
+        <>
+            <div style={{ margin: "1rem" }}>
 
-            <h1> Dashboard Page </h1>
+                <h1> Admin Control </h1>
+
+                <Box sx={{ flexGrow: 1 }}>
+                    <Grid container spacing={3}>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Team A"
+                                variant="standard"
+                                value={team1}
+                                onChange={(e) => {
+                                    setTeam1(e.target.value)
+                                }}
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Team B"
+                                variant="standard"
+                                value={team2}
+                                onChange={(e) => {
+                                    setTeam2(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Runs"
+                                variant="standard"
+                                value={inputText}
+                                onChange={(e) => {
+                                    setInputText(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Wickets"
+                                variant="standard"
+                                value={wicketsText}
+                                onChange={(e) => {
+                                    setWicketsText(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Overs"
+                                variant="standard"
+                                value={overs}
+                                onChange={(e) => {
+                                    setOvers(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Batting Team"
+                                variant="standard"
+                                value={bat}
+                                onChange={(e) => {
+                                    setBat(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Bowling Team"
+                                variant="standard"
+                                value={bowl}
+                                onChange={(e) => {
+                                    setBowl(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Bowler"
+                                variant="standard"
+                                value={bowler}
+                                onChange={(e) => {
+                                    setBowler(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Batter 1"
+                                variant="standard"
+                                value={batter1}
+                                onChange={(e) => {
+                                    setBatter1(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+                        <Grid item xs={12} md={4} >
+                            <TextField
+                                fullWidth
+                                color="primary"
+                                id="outlined-basic"
+                                label="Batter 2"
+                                variant="standard"
+                                value={batter2}
+                                onChange={(e) => {
+                                    setBatter2(e.target.value)
+                                }}
+                                
+                            />
+                        </Grid>
+                        <Grid item md={1}>
+
+                        </Grid>
+
+                        <Grid item md={3}>
+
+                        </Grid>
+                        <Grid item xs={12} md={6} >
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend" >
+                                    Toss
+                                </FormLabel>
+                                <RadioGroup
+                                    aria-label="gender"
+                                    defaultValue="Bat"
+                                    name="genderParent"
+                                >
+                                    <FormControlLabel
+                                        name="gender"
+                                        value="Bat"
+                                        control={<Radio />}
+                                        label="Bat"
+                                    />
+                                    <FormControlLabel
+                                        name="gender"
+                                        value="Field"
+                                        control={<Radio />}
+                                        label="Field"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                        </Grid>
+                        <Grid item md={3}>
+
+                        </Grid>
+                        <Grid item md={3}>
+
+                        </Grid>
+                        <Grid item xs={12} md={6} >
+                            <Button fullWidth variant="contained" onClick={submit}>Post</Button>
+                        </Grid>
+                        <Grid item md={3}>
+
+                        </Grid>
+
+                    </Grid>
+                </Box>
 
 
-            <Stack spacing={2} direction="column">
 
+                {/* {(isMore) ? <Button onClick={loadMore}>Load More</Button> : null} */}
 
-                <TextField
-                    id="outlined-multiline-static"
-                    multiline
-                    rows={1}
-                    value={team1}
-                    onChange={(e) => {
-                        setTeam1(e.target.value)
-                    }}
-                    placeholder="team 1"
-                /> <br />
-                 <TextField
-                    id="outlined-multiline-static"
-                    multiline
-                    rows={1}
-                    value={team2}
-                    onChange={(e) => {
-                        setTeam2(e.target.value)
-                    }}
-                    placeholder="team 2"
-                /> <br />
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend" style={{ textAlign: "left" }}>
-                                Toss    
-                            </FormLabel>
-                            <RadioGroup
-                                aria-label="gender"
-                                defaultValue="Bat"
-                                name="genderParent"
-                            >
-                                <FormControlLabel
-                                    name="gender"
-                                    value="Bat"
-                                    control={<Radio />}
-                                    label="Bat"
-                                />
-                                <FormControlLabel
-                                    name="gender"
-                                    value="Field"
-                                    control={<Radio />}
-                                    label="Field"
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                <TextField
-                    id="outlined-multiline-static"
-                    multiline
-                    rows={1}
-                    value={inputText}
-                    onChange={(e) => {
-                        setInputText(e.target.value)
-                    }}
-                    placeholder="Runs of team"
-                /> <br />
-                <TextField
-                    id="outlined-multiline-static"
-                    multiline
-                    rows={1}
-                    value={wicketsText}
-                    onChange={(e) => {
-                        setWicketsText(e.target.value)
-                    }}
-                    placeholder="Wickets"
-                /> <br />
-                <TextField
-                    id="outlined-multiline-static"
-                    multiline
-                    rows={1}
-                    value={overs}
-                    onChange={(e) => {
-                        setOvers(e.target.value)
-                    }}
-                    placeholder="Overs"
-                /> <br />
-                <Button variant="contained" onClick={submit}>Post</Button>
+            </div>
 
-            </Stack>
-
-            <br />
-
-
-            <Post name={posts.name} email={posts.email} team1={posts.team1Text} team2={posts.team2Text} toss={posts.gender} text={posts.postText} wickets={posts.wicketsText} overs={posts.oversText} />
-
-
-            <br />
-
-            {/* {(isMore) ? <Button onClick={loadMore}>Load More</Button> : null} */}
-
-        </div>
+        </>
     );
 }
 

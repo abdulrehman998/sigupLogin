@@ -17,6 +17,7 @@ import { Button, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import Login from "./components/login/index"
 import Signup from "./components/signup/index"
 import Splash from "./components/Splash/splash"
+import Scoreboard from "./components/Scoreboard/index"
 import Dashboard from "./components/profile/index"
 import { GlobalContext } from './context/Context';
 import { useContext } from "react";
@@ -70,7 +71,8 @@ function App() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link onClick={() => { history.push("/") }}>Dashboard</Nav.Link>
+              <Nav.Link onClick={() => { history.push("/") }}>Admin Panel</Nav.Link>
+              <Nav.Link onClick={() => { history.push("/scoreboard") }}>Score Board</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -116,6 +118,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Dashboard />
+          </Route>
+          <Route path="/scoreboard">
+            <Scoreboard />
           </Route>
 
           {/* <Redirect to="/" /> */}
